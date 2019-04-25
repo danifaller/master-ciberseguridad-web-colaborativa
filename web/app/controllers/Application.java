@@ -57,8 +57,27 @@ public class Application extends Controller {
 
     public static void doSetMark(String student, Integer mark) {
         User u = User.loadUser(student);
-        u.setMark(mark);
-        u.save();
-        index();
+        int processedMark = 0;
+        
+        try {
+        	processedMark = mark.intValue();
+        
+        } catch (Exception e) {
+        	// At this point we probably don't have an integer
+        	// TODO show a message indicating the error
+        	setMark(student);
+        }
+
+        // Mark outside the right range
+        if (processedMark < 0 || processedMark > 10) {
+        	// TODO show a message indicating the error
+        	setMark(student);
+        }
+        else {
+        	u.setMark(processedMark);
+            u.save();
+            index();
+        }
+        
     }
 }
